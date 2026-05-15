@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SEVA Partner — Driver App (Print)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="src/tokens.css" />
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #f0eee9;
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Each section = one printable page, landscape A4-ish */
+  .print-page {
+    width: 297mm;
+    height: 210mm;
+    box-sizing: border-box;
+    padding: 14mm 14mm;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    page-break-after: always;
+    break-after: page;
+    position: relative;
+  }
+  .print-page:last-child { page-break-after: auto; break-after: auto; }
+
+  /* Cover page */
+  .print-cover {
+    padding: 24mm 22mm;
+  }
+
+  /* Page header */
+  .print-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding-bottom: 10px;
+    border-bottom: 1.5px solid #E2E7ED;
+    margin-bottom: 14px;
+  }
+  .print-section-eyebrow {
+    font-size: 10px;
+    color: #8A95A3;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .print-section-title {
+    font-size: 24px;
+    font-weight: 800;
+    color: #0E1A24;
+    letter-spacing: -0.02em;
+    margin: 4px 0 2px;
+  }
+  .print-section-sub {
+    font-size: 12px;
+    color: #5A6878;
+  }
+  .print-page-num {
+    font-size: 11px;
+    color: #8A95A3;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+
+  /* Grid: 4 frames per landscape page.
+     Frame natural 402×874. Page useful area ≈ 269×170mm ≈ 1017×642px.
+     Each cell ≈ 230px wide → scale frame to ~210px wide = 0.523.
+     Scaled height = 874 × 0.523 ≈ 458px. Plus 30px for label = 488px.
+     Constrained by remaining vertical room (~530px) — fits. */
+  .print-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    align-items: start;
+    justify-items: center;
+    min-height: 0;
+  }
+  .print-artboard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    width: 210px;       /* matches scaled frame width */
+    height: 500px;      /* scaled frame height + label */
+  }
+  .print-artboard .print-frame-wrap {
+    width: 402px;
+    height: 874px;
+    transform: scale(0.523);
+    transform-origin: top left;
+    /* Hack: counter for transform's preserved layout box */
+    margin-right: calc(402px * -0.477);
+    margin-bottom: calc(874px * -0.477);
+  }
+  .print-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #0E1A24;
+    letter-spacing: -0.01em;
+    text-align: center;
+    order: -1;
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  @media print {
+    html, body { background: #fff; }
+    .print-page {
+      page-break-after: always;
+      break-after: page;
+      box-shadow: none !important;
+    }
+    .print-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+  }
+
+  @media screen {
+    body { padding: 20px 0; }
+    .print-page {
+      margin: 0 auto 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    }
+  }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+
+<script type="text/babel" src="src/ios-frame.jsx"></script>
+<script type="text/babel" src="src/shared.jsx"></script>
+<script type="text/babel" src="src/screens-a.jsx"></script>
+<script type="text/babel" src="src/screens-a2.jsx"></script>
+<script type="text/babel" src="src/screens-b.jsx"></script>
+<script type="text/babel" src="src/screens-b2.jsx"></script>
+
+<script type="text/babel" src="src/app-print.jsx"></script>
+</body>
+</html>

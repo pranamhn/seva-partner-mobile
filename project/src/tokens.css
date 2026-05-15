@@ -1,0 +1,89 @@
+/* SEVA Partner Driver — design tokens (extracted from reference screenshot) */
+
+:root {
+  /* SEVA brand cyan-blues (variations selectable via Tweaks) */
+  --seva-cyan-50:  #E6F7FD;
+  --seva-cyan-100: #B8E9F7;
+  --seva-cyan-200: #7FD3EF;
+  --seva-cyan-300: #3FB8E0;
+  --seva-cyan-400: #1AA8D4;
+  --seva-cyan-500: #00A0CC;   /* primary in reference */
+  --seva-cyan-600: #008CB8;
+  --seva-cyan-700: #00729A;
+  --seva-cyan-800: #005D7E;
+
+  /* alternate brand palettes (Tweaks) */
+  --seva-deep:   #0E76B8;     /* deeper royal blue */
+  --seva-teal:   #00A89B;     /* teal alt */
+
+  /* neutrals */
+  --ink-900: #0E1A24;
+  --ink-700: #1F2D3D;
+  --ink-500: #5A6878;
+  --ink-400: #8A95A3;
+  --ink-300: #C2CAD3;
+  --ink-200: #E2E7ED;
+  --ink-100: #F1F4F7;
+  --ink-50:  #F7FAFC;
+
+  /* accents */
+  --warn-amber:  #F59E0B;     /* matches reference orange */
+  --warn-orange: #EA7C0E;
+  --ok-green:    #1FB371;
+  --danger-red:  #E5484D;
+  --surge-pink:  #FF4F8B;
+
+  /* status colors */
+  --status-online:  #1FB371;
+  --status-offline: #8A95A3;
+  --status-busy:    #F59E0B;
+
+  /* shadows */
+  --shadow-card: 0 1px 2px rgba(15,23,42,.04), 0 4px 14px rgba(15,23,42,.06);
+  --shadow-pop:  0 10px 30px rgba(0,80,120,.18), 0 2px 8px rgba(0,80,120,.10);
+  --shadow-lift: 0 18px 48px rgba(0,60,90,.22);
+
+  /* radii */
+  --r-card: 18px;
+  --r-sm:   10px;
+  --r-pill: 9999px;
+}
+
+/* font stacks — Plus Jakarta Sans is widely used for Indonesian fintech/SaaS */
+.seva-font {
+  font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  letter-spacing: -0.01em;
+}
+
+/* number style — slightly condensed for tabular fit */
+.seva-num {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "ss01";
+}
+
+/* hide scrollbar inside frames */
+.seva-scroll::-webkit-scrollbar { display: none; }
+.seva-scroll { scrollbar-width: none; }
+
+/* shimmer for "looking for orders" state */
+@keyframes seva-pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 0.0;  transform: scale(2.4); }
+}
+@keyframes seva-pulse-2 {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50%      { opacity: 0.0;  transform: scale(3.2); }
+}
+@keyframes seva-ping {
+  0%   { transform: scale(0.95); opacity: 1; }
+  80%  { transform: scale(2.2);  opacity: 0; }
+  100% { transform: scale(2.2);  opacity: 0; }
+}
+@keyframes seva-countdown {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: 264; }
+}
+@keyframes seva-route-dash {
+  to { stroke-dashoffset: -28; }
+}
