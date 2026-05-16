@@ -11,7 +11,7 @@ import {
   BoltIcon, CarIcon, PlaneIcon, StarIcon, ArrowRightIcon, CloseIcon,
 } from '../components/Icons';
 import Avatar from '../components/Avatar';
-import CityMap from '../components/CityMap';
+import RealMap from '../components/RealMap';
 
 const ORDERS = [
   {
@@ -84,11 +84,7 @@ export default function OrderListScreen({ navigation }) {
     <View style={styles.root}>
       {/* Map background */}
       <View style={StyleSheet.absoluteFill}>
-        <CityMap
-          width={400} height={460}
-          color={brand.primary} deep={brand.deep}
-          showHeat showDriver routeProgress={0.05}
-        />
+        <RealMap mode="orderList" color={brand.primary} deep={brand.deep} />
         <View style={styles.mapOverlay} />
       </View>
 

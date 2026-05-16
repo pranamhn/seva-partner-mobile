@@ -8,7 +8,7 @@ import { T, Rp } from '../constants/copy';
 import { C } from '../constants/colors';
 import { CarIcon, BoltIcon, StarIcon, ArrowRightIcon, CloseIcon } from '../components/Icons';
 import Avatar from '../components/Avatar';
-import CityMap from '../components/CityMap';
+import RealMap from '../components/RealMap';
 
 const TOTAL_SECONDS = 12;
 const CIRCUMFERENCE = 2 * Math.PI * 42;
@@ -60,8 +60,7 @@ export default function IncomingOrderScreen({ navigation }) {
     <View style={styles.root}>
       {/* Map background */}
       <View style={StyleSheet.absoluteFill}>
-        <CityMap width={400} height={460} color={brand.primary} deep={brand.deep}
-          showHeat showDriver routeProgress={0.05} />
+        <RealMap mode="incoming" color={brand.primary} deep={brand.deep} routeProgress={0.05} />
         <View style={styles.mapOverlay} />
       </View>
 

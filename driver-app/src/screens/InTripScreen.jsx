@@ -7,7 +7,7 @@ import { T, Rp } from '../constants/copy';
 import { C } from '../constants/colors';
 import { PhoneIcon, ChatIcon, ShieldIcon, FlagIcon } from '../components/Icons';
 import Avatar from '../components/Avatar';
-import CityMap from '../components/CityMap';
+import RealMap from '../components/RealMap';
 
 function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -36,7 +36,7 @@ export default function InTripScreen({ navigation }) {
   return (
     <View style={styles.root}>
       <View style={StyleSheet.absoluteFill}>
-        <CityMap width={400} height={874} color={brand.primary} deep={brand.deep} routeProgress={0.62} />
+        <RealMap mode="trip" color={brand.primary} deep={brand.deep} routeProgress={0.62} />
       </View>
 
       {/* Top destination card */}

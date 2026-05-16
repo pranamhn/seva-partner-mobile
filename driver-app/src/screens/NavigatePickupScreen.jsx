@@ -7,7 +7,7 @@ import { T } from '../constants/copy';
 import { C } from '../constants/colors';
 import { ArrowRightIcon, PinIcon, PhoneIcon, ChatIcon, StarIcon } from '../components/Icons';
 import Avatar from '../components/Avatar';
-import CityMap from '../components/CityMap';
+import RealMap from '../components/RealMap';
 
 export default function NavigatePickupScreen({ navigation }) {
   const { brand, lang } = useApp();
@@ -20,7 +20,7 @@ export default function NavigatePickupScreen({ navigation }) {
     <View style={styles.root}>
       {/* Full-screen map */}
       <View style={StyleSheet.absoluteFill}>
-        <CityMap width={400} height={874} color={brand.primary} deep={brand.deep} routeProgress={0.35} />
+        <RealMap mode="navigate" color={brand.primary} deep={brand.deep} routeProgress={0.35} />
       </View>
 
       {/* Top ETA bar */}

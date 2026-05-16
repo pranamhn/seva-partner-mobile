@@ -22,6 +22,7 @@ import PaymentSuccessScreen from '../screens/PaymentSuccessScreen';
 import VehicleDetailScreen from '../screens/VehicleDetailScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import OrderListScreen from '../screens/OrderListScreen';
+import NotificationScreen from '../screens/NotificationScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -95,7 +96,8 @@ export default function Navigation() {
     <NavigationContainer>
       <Stack.Navigator screenOptions={{ headerShown: false, animation: 'slide_from_right' }}>
         <Stack.Screen name="Main"           component={TabNavigator} />
-        <Stack.Screen name="OrderList"      component={OrderListScreen}     options={{ presentation: 'transparentModal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="OrderList"       component={OrderListScreen}      options={{ presentation: 'transparentModal', animation: 'slide_from_bottom' }} />
+        <Stack.Screen name="Notifications"   component={NotificationScreen} />
         <Stack.Screen name="IncomingOrder"  component={IncomingOrderScreen} options={{ presentation: 'transparentModal', animation: 'slide_from_bottom' }} />
         <Stack.Screen name="NavigatePickup" component={NavigatePickupScreen} />
         <Stack.Screen name="InTrip"         component={InTripScreen} />
