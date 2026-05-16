@@ -7,9 +7,8 @@ import { T, Rp } from '../constants/copy';
 import { C } from '../constants/colors';
 import {
   BellIcon, CarIcon, CalendarIcon, PlaneIcon, BoltIcon,
-  TrendIcon, StarIcon,
+  TrendIcon, StarIcon, QRIcon,
 } from '../components/Icons';
-import Avatar from '../components/Avatar';
 import CityMap from '../components/CityMap';
 
 export default function HomeScreen({ navigation }) {
@@ -46,27 +45,14 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        {/* Mode tabs */}
-        <View style={styles.modeTabs}>
-          {[
-            { id: 'ride', label: t.mode_ride, Icon: CarIcon },
-            { id: 'rental', label: t.mode_rental, Icon: CalendarIcon },
-            { id: 'airport', label: t.mode_airport, Icon: PlaneIcon },
-          ].map((m, i) => (
-            <View key={m.id} style={[styles.modeTab, i === 0 && { backgroundColor: brand.primary }]}>
-              <m.Icon size={18} color={i === 0 ? '#fff' : C.ink500} />
-              <Text style={[styles.modeLabel, { color: i === 0 ? '#fff' : C.ink500 }]}>{m.label}</Text>
-            </View>
-          ))}
-        </View>
-
         {/* Status card */}
         <LinearGradient colors={[brand.primary, brand.deep]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.statusCard}>
-          {/* Decorative arc */}
-          <View style={[styles.arcDecor, { borderColor: 'rgba(255,255,255,0.18)' }]} />
+          {/* Decorative circles */}
+          <View style={styles.decor1} />
+          <View style={styles.decor2} />
 
           <View style={styles.statusCardTop}>
-            <View>
+            <View style={{ flex: 1 }}>
               <View style={styles.statusBadge}>
                 <View style={[styles.statusDot, {
                   backgroundColor: status === 'online' ? C.green : status === 'busy' ? C.amber : C.ink400
@@ -80,7 +66,7 @@ export default function HomeScreen({ navigation }) {
               </Text>
             </View>
             <View style={styles.qrBox}>
-              <BoltIcon size={22} color="#fff" />
+              <QRIcon size={32} color={brand.primary} strokeWidth={2} />
               <Text style={styles.qrLabel}>QR BBM</Text>
             </View>
           </View>
@@ -88,11 +74,7 @@ export default function HomeScreen({ navigation }) {
           <View style={styles.divider} />
 
           <View style={styles.statusCardBottom}>
-            <View style={styles.carRow}>
-              <CarIcon size={18} color="#fff" />
-              <Text style={styles.carText}>{t.car} · {t.plate}</Text>
-            </View>
-            {/* Toggle */}
+            <Text style={styles.carText}>{t.car}</Text>
             <TouchableOpacity
               style={[styles.toggle, { backgroundColor: isOnline ? '#fff' : 'rgba(0,0,0,0.25)' }]}
               onPress={() => setStatus(isOnline ? 'offline' : 'online')}
@@ -105,15 +87,15 @@ export default function HomeScreen({ navigation }) {
           </View>
         </LinearGradient>
 
-        {/* Stats row */}
-        <View style={styles.statsRow}>
+        {/* Stats — single card with 4 columns */}
+        <View style={styles.statsCard}>
           {[
-            { label: 'Trip', value: '12', color: C.ink900 },
-            { label: 'Jam', value: '6.4', color: C.ink900 },
-            { label: 'Acc', value: '94%', color: C.green },
-            { label: 'Rating', value: '4.9', color: C.amber, star: true },
-          ].map((s) => (
-            <View key={s.label} style={styles.statCard}>
+            { label: 'TRIP',       value: '12',  color: C.ink900 },
+            { label: 'JAM ONLINE', value: '6.4', color: C.ink900 },
+            { label: 'ACCEPTANCE', value: '94%', color: C.green },
+            { label: 'RATING',     value: '4.9', color: C.amber, star: true },
+          ].map((s, i) => (
+            <View key={s.label} style={[styles.statCell, i < 3 && styles.statCellBorder]}>
               <View style={styles.statValueRow}>
                 <Text style={[styles.statValue, { color: s.color }]}>{s.value}</Text>
                 {s.star && <StarIcon size={11} color={C.amber} />}
@@ -201,37 +183,35 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: C.bg },
   scroll: { flex: 1 },
   content: { paddingHorizontal: 18 },
-  ambientGrad: { position: 'absolute', top: 0, left: 0, right: 0, height: 240, opacity: 0.6 },
+  ambientGrad: { position: 'absolute', top: 0, left: 0, right: 0, height: 260, opacity: 0.5 },
   headerRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginTop: 6 },
-  greeting: { fontSize: 16, fontWeight: '600' },
-  name: { fontSize: 24, fontWeight: '800', color: C.ink900, letterSpacing: -0.5, marginTop: 2 },
-  bellBtn: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center' },
+  greeting: { fontSize: 18, fontWeight: '600' },
+  name: { fontSize: 26, fontWeight: '800', color: C.ink900, letterSpacing: -0.5, marginTop: 2 },
+  bellBtn: { width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center' },
   notifDot: { position: 'absolute', top: 8, right: 8, width: 10, height: 10, borderRadius: 5, backgroundColor: C.amber, borderWidth: 2, borderColor: '#fff' },
-  modeTabs: { flexDirection: 'row', gap: 8, marginTop: 18, backgroundColor: '#fff', padding: 4, borderRadius: 14, shadowColor: '#0f172a', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3 },
-  modeTab: { flex: 1, alignItems: 'center', paddingVertical: 8, paddingHorizontal: 4, borderRadius: 10, gap: 4 },
-  modeLabel: { fontSize: 11, fontWeight: '700' },
-  statusCard: { marginTop: 14, borderRadius: 22, padding: 18, overflow: 'hidden' },
-  arcDecor: { position: 'absolute', top: -40, right: -40, width: 160, height: 160, borderRadius: 80, borderWidth: 1.5, opacity: 0.18, borderColor: '#fff' },
-  statusCardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start' },
-  statusBadge: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(255,255,255,0.18)', paddingHorizontal: 10, paddingVertical: 4, borderRadius: 999 },
-  statusDot: { width: 6, height: 6, borderRadius: 3 },
-  statusBadgeText: { fontSize: 11, fontWeight: '700', color: '#fff' },
-  earningsLabel: { fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 12 },
-  earningsValue: { fontSize: 32, fontWeight: '800', color: '#fff', letterSpacing: -0.5, lineHeight: 36, marginTop: 2 },
+  statusCard: { marginTop: 18, borderRadius: 22, padding: 18, overflow: 'hidden' },
+  decor1: { position: 'absolute', top: -50, right: -50, width: 180, height: 180, borderRadius: 90, borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.15)' },
+  decor2: { position: 'absolute', top: -20, right: -20, width: 120, height: 120, borderRadius: 60, borderWidth: 1.5, borderColor: 'rgba(255,255,255,0.10)' },
+  statusCardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12 },
+  statusBadge: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: '#0E1A24', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 999, alignSelf: 'flex-start' },
+  statusDot: { width: 8, height: 8, borderRadius: 4 },
+  statusBadgeText: { fontSize: 12, fontWeight: '800', color: '#fff', letterSpacing: 0.5 },
+  earningsLabel: { fontSize: 13, color: 'rgba(255,255,255,0.85)', marginTop: 14 },
+  earningsValue: { fontSize: 34, fontWeight: '800', color: '#fff', letterSpacing: -0.5, lineHeight: 40, marginTop: 2 },
   earningsSub: { fontSize: 12, color: 'rgba(255,255,255,0.85)', marginTop: 4 },
-  qrBox: { width: 64, height: 64, borderRadius: 14, backgroundColor: 'rgba(255,255,255,0.18)', alignItems: 'center', justifyContent: 'center', gap: 2, borderWidth: 1, borderColor: 'rgba(255,255,255,0.25)' },
-  qrLabel: { fontSize: 9, color: '#fff', fontWeight: '700' },
-  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.18)', marginVertical: 14 },
+  qrBox: { width: 76, height: 76, borderRadius: 16, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', gap: 4 },
+  qrLabel: { fontSize: 10, fontWeight: '800', color: '#0E1A24' },
+  divider: { height: 1, backgroundColor: 'rgba(255,255,255,0.2)', marginVertical: 14 },
   statusCardBottom: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
-  carRow: { flexDirection: 'row', alignItems: 'center', gap: 8 },
-  carText: { color: '#fff', fontSize: 13, fontWeight: '600', opacity: 0.9 },
+  carText: { color: '#fff', fontSize: 15, fontWeight: '700' },
   toggle: { width: 50, height: 28, borderRadius: 14, justifyContent: 'center' },
   toggleThumb: { position: 'absolute', width: 22, height: 22, borderRadius: 11, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.2, shadowRadius: 2, elevation: 2 },
-  statsRow: { marginTop: 12, flexDirection: 'row', gap: 8 },
-  statCard: { flex: 1, backgroundColor: '#fff', borderRadius: 14, paddingVertical: 10, paddingHorizontal: 8, alignItems: 'center', shadowColor: '#0f172a', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
+  statsCard: { marginTop: 12, backgroundColor: '#fff', borderRadius: 18, flexDirection: 'row', shadowColor: '#0f172a', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
+  statCell: { flex: 1, paddingVertical: 14, alignItems: 'center' },
+  statCellBorder: { borderRightWidth: 1, borderRightColor: C.ink100 },
   statValueRow: { flexDirection: 'row', alignItems: 'center', gap: 3 },
-  statValue: { fontSize: 18, fontWeight: '800', letterSpacing: -0.5 },
-  statLabel: { fontSize: 10.5, color: C.ink400, marginTop: 1, fontWeight: '600' },
+  statValue: { fontSize: 20, fontWeight: '800', letterSpacing: -0.5 },
+  statLabel: { fontSize: 9.5, color: C.ink400, marginTop: 2, fontWeight: '700', letterSpacing: 0.3 },
   card: { marginTop: 14, backgroundColor: '#fff', borderRadius: 18, padding: 14, shadowColor: '#0f172a', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
   cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
   cardTitle: { fontSize: 14, fontWeight: '700', color: C.ink900 },
