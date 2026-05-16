@@ -169,7 +169,7 @@ export default function HomeScreen({ navigation }) {
         {/* Simulate order CTA */}
         <TouchableOpacity
           style={[styles.simulateBtn, { backgroundColor: brand.primary }]}
-          onPress={() => navigation.navigate('IncomingOrder')}
+          onPress={() => navigation.navigate('OrderList')}
         >
           <BoltIcon size={18} color="#fff" />
           <Text style={styles.simulateBtnText}>{t.simulate_order}</Text>
