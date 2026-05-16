@@ -175,3 +175,10 @@ export const CreditCardIcon = ({ size = d.s, color = d.c, strokeWidth = d.w }) =
     <Path d="M2 10h20M6 15h4" strokeLinecap="round"/>
   </Svg>
 );
+
+export const SearchIcon = ({ size = d.s, color = d.c, strokeWidth = d.w }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+    <Circle cx="11" cy="11" r="7"/>
+    <Path d="M21 21l-4.35-4.35"/>
+  </Svg>
+);

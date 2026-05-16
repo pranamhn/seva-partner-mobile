@@ -6,7 +6,7 @@ import { useApp } from '../context/AppContext';
 import { T, Rp } from '../constants/copy';
 import { C } from '../constants/colors';
 import {
-  BellIcon, BoltIcon, TrendIcon, StarIcon, QRIcon,
+  BellIcon, TrendIcon, StarIcon, QRIcon, SearchIcon,
 } from '../components/Icons';
 import RealMap from '../components/RealMap';
 
@@ -108,7 +108,7 @@ export default function HomeScreen({ navigation }) {
         </View>
 
         {/* Demand map */}
-        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('IncomingOrder')} activeOpacity={0.9}>
+        <View style={styles.card}>
           <View style={styles.cardHeader}>
             <View>
               <Text style={styles.cardTitle}>{t.nearby_demand}</Text>
@@ -126,19 +126,15 @@ export default function HomeScreen({ navigation }) {
           <View style={styles.mapContainer}>
             <RealMap mode="demand" color={brand.primary} deep={brand.deep} />
           </View>
-          <View style={[styles.mapCta, { marginTop: 10 }]}>
-            <Text style={[styles.mapCtaText, { color: brand.primary }]}>Cari order di area ini →</Text>
-          </View>
-        </TouchableOpacity>
-
-        {/* Simulate order CTA */}
-        <TouchableOpacity
-          style={[styles.simulateBtn, { backgroundColor: brand.primary }]}
-          onPress={() => navigation.navigate('OrderList')}
-        >
-          <BoltIcon size={18} color="#fff" />
-          <Text style={styles.simulateBtnText}>{t.simulate_order}</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={[styles.findOrderBtn, { backgroundColor: brand.primary }]}
+            onPress={() => navigation.navigate('OrderList')}
+            activeOpacity={0.85}
+          >
+            <SearchIcon size={18} color="#fff" strokeWidth={2.5} />
+            <Text style={styles.findOrderText}>Cari Order</Text>
+          </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
@@ -184,9 +180,7 @@ const styles = StyleSheet.create({
   demandBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 999 },
   demandBadgeText: { fontSize: 11, fontWeight: '700' },
   mapContainer: { borderRadius: 12, overflow: 'hidden', height: 220 },
-  mapCta: { alignItems: 'center' },
-  mapCtaText: { fontSize: 12, fontWeight: '700' },
   seeAll: { fontSize: 11, fontWeight: '700' },
-  simulateBtn: { marginTop: 20, borderRadius: 16, height: 56, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 10 },
-  simulateBtnText: { color: '#fff', fontWeight: '800', fontSize: 15 },
+  findOrderBtn: { marginTop: 12, borderRadius: 14, height: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
+  findOrderText: { color: '#fff', fontWeight: '800', fontSize: 15 },
 });
