@@ -4,7 +4,7 @@ import Svg, { Defs, Pattern, Rect, Path, Circle, Text as SvgText } from 'react-n
 export default function CityMap({
   width = 380, height = 240, dark = false,
   showRoute = true, showDriver = true, showPickup = true, showDropoff = true,
-  showHeat = false, color = '#00A0CC', deep = '#008CB8',
+  showHeat = false, color = '#00A89B', deep = '#008275',
   routeProgress = 0.45,
 }) {
   const land = dark ? '#0B1620' : '#E8EEF3';
