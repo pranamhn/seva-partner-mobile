@@ -46,20 +46,6 @@ export default function HomeScreen({ navigation }) {
           </TouchableOpacity>
         </View>
 
-        {/* Mode tabs */}
-        <View style={styles.modeTabs}>
-          {[
-            { id: 'ride', label: t.mode_ride, Icon: CarIcon },
-            { id: 'rental', label: t.mode_rental, Icon: CalendarIcon },
-            { id: 'airport', label: t.mode_airport, Icon: PlaneIcon },
-          ].map((m, i) => (
-            <View key={m.id} style={[styles.modeTab, i === 0 && { backgroundColor: brand.primary }]}>
-              <m.Icon size={18} color={i === 0 ? '#fff' : C.ink500} />
-              <Text style={[styles.modeLabel, { color: i === 0 ? '#fff' : C.ink500 }]}>{m.label}</Text>
-            </View>
-          ))}
-        </View>
-
         {/* Status card */}
         <LinearGradient colors={[brand.primary, brand.deep]} start={{ x: 0, y: 0 }} end={{ x: 1, y: 1 }} style={styles.statusCard}>
           {/* Decorative arc */}
