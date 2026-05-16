@@ -6,7 +6,7 @@ import { useApp } from '../context/AppContext';
 import { T, Rp } from '../constants/copy';
 import { C } from '../constants/colors';
 import {
-  BellIcon, TrendIcon, StarIcon, QRIcon, SearchIcon,
+  BellIcon, BoltIcon, TrendIcon, StarIcon, QRIcon, SearchIcon,
 } from '../components/Icons';
 import RealMap from '../components/RealMap';
 
@@ -108,32 +108,57 @@ export default function HomeScreen({ navigation }) {
         </View>
 
         {/* Demand map */}
-        <View style={styles.card}>
-          <View style={styles.cardHeader}>
+        <View style={styles.demandCard}>
+          {/* Header */}
+          <View style={styles.demandHeader}>
             <View>
               <Text style={styles.cardTitle}>{t.nearby_demand}</Text>
               <Text style={styles.cardSub}>SCBD · radius 2 km</Text>
             </View>
-            <View style={[styles.demandBadge, {
-              backgroundColor: surge ? '#FFE6EE' : '#E6F7F0',
-            }]}>
+            <View style={[styles.demandBadge, { backgroundColor: surge ? '#FFE6EE' : '#E6F7F0' }]}>
               <TrendIcon size={12} color={surge ? '#E5276E' : C.green} strokeWidth={2.5} />
               <Text style={[styles.demandBadgeText, { color: surge ? '#E5276E' : C.green }]}>
                 {surge ? `${t.high} · 1.7×` : t.medium}
               </Text>
             </View>
           </View>
-          <View style={styles.mapContainer}>
+
+          {/* Map — edge-to-edge */}
+          <View style={styles.demandMapWrap}>
             <RealMap mode="demand" color={brand.primary} deep={brand.deep} />
+
+            {/* Floating overlay */}
+            <View style={styles.mapOverlayRow}>
+              <View style={styles.mapInfoPill}>
+                <View style={[styles.mapInfoDot, { backgroundColor: brand.primary }]} />
+                <Text style={styles.mapInfoText}>8 order tersedia · SCBD</Text>
+              </View>
+              {surge && (
+                <View style={styles.mapSurgePill}>
+                  <BoltIcon size={10} color="#fff" />
+                  <Text style={styles.mapSurgeText}>1.7× Surge</Text>
+                </View>
+              )}
+            </View>
           </View>
-          <TouchableOpacity
-            style={[styles.findOrderBtn, { backgroundColor: brand.primary }]}
-            onPress={() => navigation.navigate('OrderList')}
-            activeOpacity={0.85}
-          >
-            <SearchIcon size={18} color="#fff" strokeWidth={2.5} />
-            <Text style={styles.findOrderText}>Cari Order</Text>
-          </TouchableOpacity>
+
+          {/* CTA */}
+          <View style={styles.demandFooter}>
+            <TouchableOpacity
+              style={styles.findOrderBtn}
+              onPress={() => navigation.navigate('OrderList')}
+              activeOpacity={0.85}
+            >
+              <LinearGradient
+                colors={[brand.primary, brand.deep]}
+                start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
+                style={styles.findOrderGrad}
+              >
+                <SearchIcon size={17} color="#fff" strokeWidth={2.5} />
+                <Text style={styles.findOrderText}>Cari Order</Text>
+              </LinearGradient>
+            </TouchableOpacity>
+          </View>
         </View>
       </ScrollView>
     </View>
@@ -173,14 +198,21 @@ const styles = StyleSheet.create({
   statValueRow: { flexDirection: 'row', alignItems: 'center', gap: 3 },
   statValue: { fontSize: 20, fontWeight: '800', letterSpacing: -0.5 },
   statLabel: { fontSize: 9.5, color: C.ink400, marginTop: 2, fontWeight: '700', letterSpacing: 0.3 },
-  card: { marginTop: 14, backgroundColor: '#fff', borderRadius: 18, padding: 14, shadowColor: '#0f172a', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
-  cardHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 },
+  demandCard: { marginTop: 14, backgroundColor: '#fff', borderRadius: 20, overflow: 'hidden', shadowColor: '#0f172a', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.06, shadowRadius: 8, elevation: 3 },
+  demandHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 14, paddingTop: 14, paddingBottom: 12 },
   cardTitle: { fontSize: 14, fontWeight: '700', color: C.ink900 },
   cardSub: { fontSize: 11, color: C.ink500, marginTop: 1 },
   demandBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 999 },
   demandBadgeText: { fontSize: 11, fontWeight: '700' },
-  mapContainer: { borderRadius: 12, overflow: 'hidden', height: 220 },
-  seeAll: { fontSize: 11, fontWeight: '700' },
-  findOrderBtn: { marginTop: 12, borderRadius: 14, height: 52, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
+  demandMapWrap: { height: 200, position: 'relative' },
+  mapOverlayRow: { position: 'absolute', bottom: 10, left: 10, flexDirection: 'row', gap: 6 },
+  mapInfoPill: { flexDirection: 'row', alignItems: 'center', gap: 6, backgroundColor: 'rgba(14,26,36,0.72)', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 999 },
+  mapInfoDot: { width: 7, height: 7, borderRadius: 4 },
+  mapInfoText: { color: '#fff', fontSize: 11, fontWeight: '700' },
+  mapSurgePill: { flexDirection: 'row', alignItems: 'center', gap: 4, backgroundColor: '#FF4F8B', paddingHorizontal: 8, paddingVertical: 6, borderRadius: 999 },
+  mapSurgeText: { color: '#fff', fontSize: 11, fontWeight: '800' },
+  demandFooter: { paddingHorizontal: 14, paddingTop: 10, paddingBottom: 14 },
+  findOrderBtn: { borderRadius: 14, overflow: 'hidden' },
+  findOrderGrad: { height: 50, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 },
   findOrderText: { color: '#fff', fontWeight: '800', fontSize: 15 },
 });

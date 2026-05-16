@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-import MapView, { Marker, Polyline, Circle } from 'react-native-maps';
+import MapView, { Marker, Polyline, Circle, UrlTile } from 'react-native-maps';
 
 // Jakarta landmark coordinates
 const PICKUP  = { latitude: -6.2236, longitude: 106.8093 }; // Pacific Place SCBD
@@ -93,6 +93,14 @@ export default function RealMap({
       showsScale={false}
       toolbarEnabled={false}
     >
+      {/* OpenStreetMap free tiles */}
+      <UrlTile
+        urlTemplate="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
+        maximumZ={19}
+        flipY={false}
+        tileSize={256}
+      />
+
       {/* Demand heat circles */}
       {mode === 'demand' && DEMAND_CLUSTERS.map((c, i) => (
         <Circle
