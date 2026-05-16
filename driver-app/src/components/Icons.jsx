@@ -1,5 +1,5 @@
 import React from 'react';
-import Svg, { Path, Circle, Rect } from 'react-native-svg';
+import Svg, { Path, Circle, Rect, G } from 'react-native-svg';
 
 const d = { s: 22, c: 'currentColor', w: 2 };
 
@@ -137,5 +137,41 @@ export const CloseIcon = ({ size = d.s, color = d.c, strokeWidth = 2.5 }) => (
 export const SwapIcon = ({ size = d.s, color = d.c, strokeWidth = d.w }) => (
   <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
     <Path d="M4 7h13l-3-3M20 17H7l3 3"/>
+  </Svg>
+);
+
+export const QRIcon = ({ size = d.s, color = d.c, strokeWidth = d.w }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth}>
+    <Rect x="3" y="3" width="7" height="7" rx="1"/>
+    <Rect x="14" y="3" width="7" height="7" rx="1"/>
+    <Rect x="3" y="14" width="7" height="7" rx="1"/>
+    <Path d="M14 14h3v3h-3zM20 14v7M14 20h3M17 17v4" strokeLinecap="round"/>
+  </Svg>
+);
+
+export const GearIcon = ({ size = d.s, color = d.c, strokeWidth = d.w }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth}>
+    <Path d="M4 9h4l2-3h4l2 3h4v6h-4l-2 3h-4l-2-3H4z" strokeLinejoin="round"/>
+    <Circle cx="12" cy="12" r="2.5"/>
+  </Svg>
+);
+
+export const FuelIcon = ({ size = d.s, color = d.c, strokeWidth = d.w }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+    <Path d="M4 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16"/>
+    <Path d="M3 21h13M15 9l3 3v6a2 2 0 0 0 2 2"/>
+  </Svg>
+);
+
+export const ChevronRightIcon = ({ size = d.s, color = d.c, strokeWidth = 2.5 }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round">
+    <Path d="M9 6l6 6-6 6"/>
+  </Svg>
+);
+
+export const CreditCardIcon = ({ size = d.s, color = d.c, strokeWidth = d.w }) => (
+  <Svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth={strokeWidth}>
+    <Rect x="2" y="5" width="20" height="14" rx="3"/>
+    <Path d="M2 10h20M6 15h4" strokeLinecap="round"/>
   </Svg>
 );

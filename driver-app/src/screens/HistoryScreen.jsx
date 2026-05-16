@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { View, Text, ScrollView, TouchableOpacity, StyleSheet } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useApp } from '../context/AppContext';
 import { T, Rp } from '../constants/copy';
 import { C } from '../constants/colors';
-import { CarIcon, CalendarIcon, PlaneIcon, CloseIcon, FilterIcon } from '../components/Icons';
+import { CarIcon, CalendarIcon, PlaneIcon, CloseIcon, FilterIcon, CheckIcon, ClockIcon } from '../components/Icons';
 
 const TRIPS = [
   { day: 'Hari ini · Kamis 15 Mei', items: [
@@ -14,31 +15,34 @@ const TRIPS = [
   ]},
   { day: 'Kemarin · Rabu 14 Mei', items: [
     { time: '18:05', from: 'Grand Indonesia', to: 'Pondok Indah', fare: 78500, type: 'ride', dist: '12 km' },
-    { time: '14:30', from: 'Menteng Trenggulun', to: '', fare: 0, type: 'ride', status: 'cancel', dist: '-' },
-    { time: '10:00', from: 'Rental Harian — Ny. Putri', to: '8 jam', fare: 650000, type: 'rental', dist: '—' },
+    { time: '14:30', from: 'Menteng Trenggulun', to: '', fare: 0, type: 'ride', status: 'cancel' },
   ]},
 ];
 
-const TYPE_ICON = { ride: CarIcon, rental: CalendarIcon, airport: PlaneIcon };
+const PAYMENTS = [
+  { month: 'Mei 2026', items: [
+    { date: '25 Mei', label: 'Cicilan Mei 2026', amount: 6500000, status: 'pending' },
+    { date: '20 Mei', label: 'Biaya Registrasi · Sisa', amount: 198000, status: 'pending' },
+  ]},
+  { month: 'April 2026', items: [
+    { date: '23 Apr', label: 'Cicilan April 2026', amount: 6500000, status: 'paid' },
+    { date: '15 Apr', label: 'Biaya Registrasi · Termin 2', amount: 152000, status: 'paid' },
+  ]},
+  { month: 'Maret 2026', items: [
+    { date: '24 Mar', label: 'Cicilan Maret 2026', amount: 6500000, status: 'paid' },
+    { date: '08 Mar', label: 'Biaya Registrasi · Termin 1', amount: 100000, status: 'paid' },
+  ]},
+];
 
 export default function HistoryScreen() {
   const { brand, lang } = useApp();
   const t = T(lang);
   const insets = useSafeAreaInsets();
-  const [filter, setFilter] = useState('all');
-
-  const filters = [
-    { id: 'all', label: 'Semua' },
-    { id: 'ride', label: t.mode_ride },
-    { id: 'rental', label: t.mode_rental },
-    { id: 'airport', label: t.mode_airport },
-    { id: 'cancel', label: t.cancelled },
-  ];
+  const [activeTab, setActiveTab] = useState('trip');
 
   const typeMeta = {
-    ride:    { bg: brand.surface, fg: brand.primary, label: t.mode_ride },
-    rental:  { bg: '#FFF4D6', fg: '#B47E00', label: t.mode_rental },
-    airport: { bg: '#E3F0FA', fg: brand.deep, label: t.mode_airport },
+    ride:    { Icon: CarIcon,      bg: brand.surface, fg: brand.primary, label: t.mode_ride },
+    airport: { Icon: PlaneIcon,    bg: '#E3F0FA',     fg: brand.deep,    label: t.mode_airport },
   };
 
   return (
@@ -49,72 +53,117 @@ export default function HistoryScreen() {
     >
       <View style={styles.header}>
         <View>
-          <Text style={styles.title}>{t.riwayat}</Text>
-          <Text style={styles.subtitle}>32 trip bulan ini · Rp 4.215.000</Text>
+          <Text style={styles.title}>Riwayat</Text>
+          <Text style={styles.subtitle}>
+            {activeTab === 'trip' ? '32 trip bulan ini' : 'Cicilan & registrasi'}
+          </Text>
         </View>
         <TouchableOpacity style={styles.filterBtn}>
           <FilterIcon size={20} color={brand.primary} strokeWidth={2.2} />
         </TouchableOpacity>
       </View>
 
-      {/* Filter chips */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterScroll} contentContainerStyle={styles.filterRow}>
-        {filters.map((f) => (
+      {/* Tab switcher */}
+      <View style={styles.tabSwitcher}>
+        <View style={[styles.tabIndicator, {
+          backgroundColor: brand.primary,
+          left: activeTab === 'trip' ? 4 : '50%',
+        }]} />
+        {[
+          { id: 'trip', label: 'Trip' },
+          { id: 'payment', label: 'Pembayaran' },
+        ].map((tab) => (
           <TouchableOpacity
-            key={f.id}
-            style={[styles.chip, filter === f.id && { backgroundColor: brand.primary }]}
-            onPress={() => setFilter(f.id)}
+            key={tab.id}
+            style={styles.tabBtn}
+            onPress={() => setActiveTab(tab.id)}
           >
-            <Text style={[styles.chipText, filter === f.id && { color: '#fff' }]}>{f.label}</Text>
+            <Text style={[styles.tabBtnText, activeTab === tab.id && styles.tabBtnActive]}>
+              {tab.label}
+            </Text>
           </TouchableOpacity>
         ))}
-      </ScrollView>
+      </View>
 
-      {TRIPS.map((g) => (
-        <View key={g.day} style={styles.group}>
-          <Text style={styles.dayLabel}>{g.day.toUpperCase()}</Text>
-          <View style={styles.groupCard}>
-            {g.items
-              .filter((it) => filter === 'all' || filter === it.type || (filter === 'cancel' && it.status === 'cancel'))
-              .map((it, i, arr) => {
-                const m = typeMeta[it.type];
-                const IconComp = TYPE_ICON[it.type];
-                const cancelled = it.status === 'cancel';
-                return (
-                  <View key={i} style={[styles.tripRow, i < arr.length - 1 && styles.tripRowBorder]}>
-                    <View style={[styles.typeIcon, { backgroundColor: cancelled ? '#FEE2E2' : m.bg }]}>
-                      {cancelled
-                        ? <CloseIcon size={20} color={C.red} strokeWidth={2.4} />
-                        : <IconComp size={20} color={m.fg} />
+      {activeTab === 'trip' ? (
+        <View style={{ marginTop: 14 }}>
+          {TRIPS.map((g) => (
+            <View key={g.day} style={styles.group}>
+              <Text style={styles.dayLabel}>{g.day.toUpperCase()}</Text>
+              <View style={styles.groupCard}>
+                {g.items.map((it, i) => {
+                  const m = typeMeta[it.type] || typeMeta.ride;
+                  const cancelled = it.status === 'cancel';
+                  return (
+                    <View key={i} style={[styles.tripRow, i < g.items.length - 1 && styles.tripRowBorder]}>
+                      <View style={[styles.typeIcon, { backgroundColor: cancelled ? '#FEE2E2' : m.bg }]}>
+                        {cancelled
+                          ? <CloseIcon size={20} color={C.red} strokeWidth={2.4} />
+                          : <m.Icon size={20} color={m.fg} />
+                        }
+                      </View>
+                      <View style={styles.tripInfo}>
+                        <Text style={styles.tripRoute} numberOfLines={1}>
+                          {it.from}{!cancelled && it.to ? ` → ${it.to}` : ''}
+                        </Text>
+                        <View style={styles.tripMeta}>
+                          <Text style={styles.tripMetaText}>{it.time}</Text>
+                          {it.dist && it.dist !== '-' && (
+                            <>
+                              <View style={styles.metaDot} />
+                              <Text style={styles.tripMetaText}>{it.dist}</Text>
+                            </>
+                          )}
+                          <View style={styles.metaDot} />
+                          <Text style={[styles.tripMetaText, { color: cancelled ? C.red : m.fg, fontWeight: '700' }]}>
+                            {cancelled ? t.cancelled : m.label}
+                          </Text>
+                        </View>
+                      </View>
+                      <Text style={[styles.tripFare, cancelled && { color: C.red }]}>
+                        {cancelled ? '—' : Rp(it.fare)}
+                      </Text>
+                    </View>
+                  );
+                })}
+              </View>
+            </View>
+          ))}
+        </View>
+      ) : (
+        <View style={{ marginTop: 14 }}>
+          {PAYMENTS.map((g) => (
+            <View key={g.month} style={styles.group}>
+              <Text style={styles.dayLabel}>{g.month.toUpperCase()}</Text>
+              <View style={styles.groupCard}>
+                {g.items.map((it, i) => (
+                  <View key={i} style={[styles.tripRow, i < g.items.length - 1 && styles.tripRowBorder]}>
+                    <View style={[styles.typeIcon, {
+                      backgroundColor: it.status === 'paid' ? '#E6F7F0' : '#FFF4D6',
+                    }]}>
+                      {it.status === 'paid'
+                        ? <CheckIcon size={20} color={C.green} strokeWidth={2.4} />
+                        : <ClockIcon size={20} color={C.amber} strokeWidth={2.2} />
                       }
                     </View>
                     <View style={styles.tripInfo}>
-                      <Text style={styles.tripRoute} numberOfLines={1}>
-                        {it.from}{!cancelled && it.to ? ` → ${it.to}` : ''}
+                      <Text style={styles.tripRoute}>{it.label}</Text>
+                      <Text style={[styles.tripMetaText, {
+                        color: it.status === 'paid' ? C.ink500 : C.amber,
+                        fontWeight: it.status === 'paid' ? '500' : '700',
+                        marginTop: 1,
+                      }]}>
+                        {it.status === 'paid' ? `Dibayar ${it.date}` : `Jatuh tempo ${it.date}`}
                       </Text>
-                      <View style={styles.tripMeta}>
-                        <Text style={styles.tripMetaText}>{it.time}</Text>
-                        {it.dist !== '-' && it.dist !== '—' && (
-                          <>
-                            <View style={styles.metaDot} />
-                            <Text style={styles.tripMetaText}>{it.dist}</Text>
-                          </>
-                        )}
-                        <View style={styles.metaDot} />
-                        <Text style={[styles.tripMetaText, { color: cancelled ? C.red : m.fg, fontWeight: '700' }]}>
-                          {cancelled ? t.cancelled : m.label}
-                        </Text>
-                      </View>
                     </View>
-                    <Text style={[styles.tripFare, cancelled && { color: C.red }]}>
-                      {cancelled ? '—' : Rp(it.fare)}
-                    </Text>
+                    <Text style={styles.tripFare}>{Rp(it.amount)}</Text>
                   </View>
-                );
-              })}
-          </View>
+                ))}
+              </View>
+            </View>
+          ))}
         </View>
-      ))}
+      )}
     </ScrollView>
   );
 }
@@ -126,14 +175,15 @@ const styles = StyleSheet.create({
   title: { fontSize: 24, fontWeight: '800', color: C.ink900, letterSpacing: -0.5 },
   subtitle: { fontSize: 12, color: C.ink500, marginTop: 2 },
   filterBtn: { width: 44, height: 44, borderRadius: 12, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center', shadowColor: '#0f172a', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
-  filterScroll: { marginBottom: 16 },
-  filterRow: { flexDirection: 'row', gap: 8, paddingRight: 18 },
-  chip: { paddingHorizontal: 14, paddingVertical: 7, borderRadius: 999, backgroundColor: '#fff', shadowColor: '#0f172a', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
-  chipText: { fontSize: 12, fontWeight: '700', color: C.ink500 },
-  group: { marginBottom: 16 },
+  tabSwitcher: { position: 'relative', backgroundColor: '#fff', padding: 4, borderRadius: 12, flexDirection: 'row', shadowColor: '#0f172a', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2, overflow: 'hidden' },
+  tabIndicator: { position: 'absolute', top: 4, bottom: 4, width: '50%', borderRadius: 9 },
+  tabBtn: { flex: 1, paddingVertical: 10, alignItems: 'center' },
+  tabBtnText: { fontSize: 12, fontWeight: '700', color: C.ink500 },
+  tabBtnActive: { color: '#fff' },
+  group: { marginBottom: 14 },
   dayLabel: { fontSize: 11, fontWeight: '800', color: C.ink400, letterSpacing: 0.5, marginBottom: 8, paddingLeft: 4 },
-  groupCard: { backgroundColor: '#fff', borderRadius: 18, padding: 4, shadowColor: '#0f172a', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
-  tripRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 12, paddingVertical: 10 },
+  groupCard: { backgroundColor: '#fff', borderRadius: 18, shadowColor: '#0f172a', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.04, shadowRadius: 4, elevation: 2 },
+  tripRow: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingHorizontal: 14, paddingVertical: 12 },
   tripRowBorder: { borderBottomWidth: 1, borderBottomColor: C.ink100 },
   typeIcon: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
   tripInfo: { flex: 1, minWidth: 0 },

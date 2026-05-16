@@ -124,7 +124,7 @@ export default function HomeScreen({ navigation }) {
         </View>
 
         {/* Demand map */}
-        <View style={styles.card}>
+        <TouchableOpacity style={styles.card} onPress={() => navigation.navigate('IncomingOrder')} activeOpacity={0.9}>
           <View style={styles.cardHeader}>
             <View>
               <Text style={styles.cardTitle}>{t.nearby_demand}</Text>
@@ -143,15 +143,20 @@ export default function HomeScreen({ navigation }) {
             <CityMap width={320} height={130} color={brand.primary} deep={brand.deep}
               showHeat showDriver showPickup={false} showDropoff={false} showRoute={false} />
           </View>
-        </View>
+          <View style={[styles.mapCta, { marginTop: 10 }]}>
+            <Text style={[styles.mapCtaText, { color: brand.primary }]}>Cari order di area ini →</Text>
+          </View>
+        </TouchableOpacity>
 
         {/* Upcoming */}
         <View style={styles.card}>
           <View style={[styles.cardHeader, { marginBottom: 8 }]}>
             <Text style={styles.cardTitle}>{t.upcoming}</Text>
-            <Text style={[styles.seeAll, { color: brand.primary }]}>{t.see_all} ›</Text>
+            <TouchableOpacity onPress={() => navigation.navigate('History')}>
+              <Text style={[styles.seeAll, { color: brand.primary }]}>{t.see_all} ›</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.upcomingItem}>
+          <TouchableOpacity style={styles.upcomingItem} onPress={() => navigation.navigate('IncomingOrder')}>
             <View style={[styles.upcomingIcon, { backgroundColor: '#E3F0FA' }]}>
               <PlaneIcon size={20} color={brand.deep} />
             </View>
@@ -163,8 +168,8 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.upcomingFare}>Rp 285k</Text>
               <Text style={[styles.upcomingTag, { color: brand.primary }]}>Airport</Text>
             </View>
-          </View>
-          <View style={[styles.upcomingItem, { borderBottomWidth: 0 }]}>
+          </TouchableOpacity>
+          <TouchableOpacity style={[styles.upcomingItem, { borderBottomWidth: 0 }]} onPress={() => navigation.navigate('TagihanDetail')}>
             <View style={[styles.upcomingIcon, { backgroundColor: brand.surface }]}>
               <CalendarIcon size={20} color={brand.primary} />
             </View>
@@ -176,7 +181,7 @@ export default function HomeScreen({ navigation }) {
               <Text style={styles.upcomingFare}>Rp 650k</Text>
               <Text style={[styles.upcomingTag, { color: brand.primary }]}>Rental</Text>
             </View>
-          </View>
+          </TouchableOpacity>
         </View>
 
         {/* Simulate order CTA */}
@@ -234,6 +239,8 @@ const styles = StyleSheet.create({
   demandBadge: { flexDirection: 'row', alignItems: 'center', gap: 4, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 999 },
   demandBadgeText: { fontSize: 11, fontWeight: '700' },
   mapContainer: { borderRadius: 12, overflow: 'hidden', height: 130 },
+  mapCta: { alignItems: 'center' },
+  mapCtaText: { fontSize: 12, fontWeight: '700' },
   seeAll: { fontSize: 11, fontWeight: '700' },
   upcomingItem: { flexDirection: 'row', alignItems: 'center', gap: 12, paddingVertical: 10, paddingHorizontal: 4, borderBottomWidth: 1, borderBottomColor: C.ink100 },
   upcomingIcon: { width: 40, height: 40, borderRadius: 12, alignItems: 'center', justifyContent: 'center' },
